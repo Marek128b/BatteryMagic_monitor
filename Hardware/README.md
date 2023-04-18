@@ -25,4 +25,4 @@ https://easyeda.com/editor#id=32b7ace7bde44caea4c9ae37066067a1|f48f90d7611346188
 
 ---
 ## diagramm
-![no Pic diagramm](img\AkkuMagic.svg)
+![no Pic diagramm](img/AkkuMagic.svg)
