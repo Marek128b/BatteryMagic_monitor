@@ -1,6 +1,6 @@
-<mxfile host="app.diagrams.net" modified="2023-04-27T09:55:51.557Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/112.0" etag="QSJGrmSDJfDEXfyUtHMs" version="21.2.3" type="github">
+<mxfile host="app.diagrams.net" modified="2023-04-27T09:58:14.417Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/112.0" etag="tNMXhBoCCcgeaLvT9_lR" version="21.2.3" type="github">
   <diagram name="Seite-1" id="qbNeW8LbGQ3-jgoNcDIC">
-    <mxGraphModel dx="819" dy="447" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+    <mxGraphModel dx="1195" dy="652" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -75,27 +75,9 @@
             <mxPoint x="246" y="467" as="sourcePoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="EvGeFhgNv6AcHJRgJvBS-22" value="&lt;div&gt;VBUS (5-20V)&amp;nbsp; 3A&lt;/div&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=12;" parent="EvGeFhgNv6AcHJRgJvBS-15" vertex="1" connectable="0">
+        <mxCell id="EvGeFhgNv6AcHJRgJvBS-22" value="&lt;div&gt;VBUS (5-15V) 3A&lt;/div&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=12;" parent="EvGeFhgNv6AcHJRgJvBS-15" vertex="1" connectable="0">
           <mxGeometry x="-0.0889" y="-2" relative="1" as="geometry">
             <mxPoint y="-2" as="offset" />
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="EvGeFhgNv6AcHJRgJvBS-18" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontSize=12;entryX=0;entryY=0.5;entryDx=0;entryDy=0;exitX=1;exitY=0.75;exitDx=0;exitDy=0;" parent="1" source="oIT6qmjDhUWV7h4Aoekk-6" target="oIT6qmjDhUWV7h4Aoekk-5" edge="1">
-          <mxGeometry relative="1" as="geometry">
-            <Array as="points">
-              <mxPoint x="240" y="500" />
-              <mxPoint x="276" y="500" />
-              <mxPoint x="276" y="580" />
-              <mxPoint x="640" y="580" />
-              <mxPoint x="640" y="620" />
-            </Array>
-            <mxPoint x="246" y="490" as="sourcePoint" />
-            <mxPoint x="796" y="520" as="targetPoint" />
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="EvGeFhgNv6AcHJRgJvBS-19" value="VBUS (5-20V)&amp;nbsp; 3A" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=12;" parent="EvGeFhgNv6AcHJRgJvBS-18" vertex="1" connectable="0">
-          <mxGeometry x="0.0714" y="-4" relative="1" as="geometry">
-            <mxPoint x="62" y="-5" as="offset" />
           </mxGeometry>
         </mxCell>
         <mxCell id="oIT6qmjDhUWV7h4Aoekk-7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.25;exitDx=0;exitDy=0;entryX=0.25;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="EvGeFhgNv6AcHJRgJvBS-11" target="oIT6qmjDhUWV7h4Aoekk-6">
@@ -135,7 +117,7 @@
             <mxPoint as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="EvGeFhgNv6AcHJRgJvBS-13" value="5V-20V &amp;gt;&amp;gt; 3V3" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="1" vertex="1">
+        <mxCell id="EvGeFhgNv6AcHJRgJvBS-13" value="5V-15V &amp;gt;&amp;gt; 3V3" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="1" vertex="1">
           <mxGeometry x="350" y="455.5" width="90" height="38" as="geometry" />
         </mxCell>
         <mxCell id="oIT6qmjDhUWV7h4Aoekk-4" value="Firestore" style="strokeWidth=2;html=1;shape=mxgraph.flowchart.database;whiteSpace=wrap;" vertex="1" parent="1">
@@ -154,7 +136,15 @@
         <mxCell id="oIT6qmjDhUWV7h4Aoekk-5" value="Boost- Battery charcher 1s-6s" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
           <mxGeometry x="680" y="590" width="120" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="oIT6qmjDhUWV7h4Aoekk-6" value="&lt;div&gt;USB-C&lt;/div&gt;&lt;div&gt;PD&lt;br&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+        <mxCell id="oIT6qmjDhUWV7h4Aoekk-27" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.75;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="oIT6qmjDhUWV7h4Aoekk-6" target="oIT6qmjDhUWV7h4Aoekk-25">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="oIT6qmjDhUWV7h4Aoekk-28" value="VBUS (5-15V) 3A" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="oIT6qmjDhUWV7h4Aoekk-27">
+          <mxGeometry x="-0.7744" y="2" relative="1" as="geometry">
+            <mxPoint x="47" y="54" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="oIT6qmjDhUWV7h4Aoekk-6" value="&lt;div&gt;USB-C&lt;/div&gt;&lt;div&gt;PD&lt;br&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
           <mxGeometry x="190" y="460" width="50" height="50" as="geometry" />
         </mxCell>
         <mxCell id="oIT6qmjDhUWV7h4Aoekk-9" value="" style="endArrow=classic;startArrow=classic;html=1;rounded=0;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.75;entryDx=0;entryDy=0;" edge="1" parent="1" source="oIT6qmjDhUWV7h4Aoekk-6" target="EvGeFhgNv6AcHJRgJvBS-11">
@@ -176,6 +166,17 @@
         </mxCell>
         <mxCell id="oIT6qmjDhUWV7h4Aoekk-14" value="&lt;div&gt;VBAT&lt;/div&gt;&lt;div&gt;switch&lt;br&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
           <mxGeometry x="860" y="590" width="80" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="oIT6qmjDhUWV7h4Aoekk-26" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="oIT6qmjDhUWV7h4Aoekk-25" target="oIT6qmjDhUWV7h4Aoekk-5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="oIT6qmjDhUWV7h4Aoekk-29" value="26V 3A" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="oIT6qmjDhUWV7h4Aoekk-26">
+          <mxGeometry x="-0.6019" y="2" relative="1" as="geometry">
+            <mxPoint x="40" y="2" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="oIT6qmjDhUWV7h4Aoekk-25" value="Boost to VBAT" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="410" y="590" width="120" height="60" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
