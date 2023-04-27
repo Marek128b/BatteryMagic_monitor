@@ -23,7 +23,7 @@ https://easyeda.com/editor#id=32b7ace7bde44caea4c9ae37066067a1|f48f90d7611346188
 ![no Pic Schematic](img/Schematic_Akku-magic_2023-04-27/ADC-....svg)
 
 ## PCB
-![no Pic PCB](img/PCB_PCB_Akku-magic_2023-04-27.svg)
+<img src="img/PCB_PCB_Akku-magic_2023-04-27.svg" width="50%"/>
 
 ---
 ## diagramm
