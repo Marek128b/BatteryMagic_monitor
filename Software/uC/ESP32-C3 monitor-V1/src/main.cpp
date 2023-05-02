@@ -5,6 +5,8 @@
 #include <AsyncTCP.h>
 #include <ESPAsyncWebServer.h>
 
+#define pinRebootAP 14
+
 #define DEBUG 1
 
 #ifdef DEBUG
@@ -150,15 +152,17 @@ void handleConnect(AsyncWebServerRequest *request)
     }
 
     File filew = SPIFFS.open("/NetworkConfig.txt", "w");
-    serializeJsonPretty(doc, filew);
+    serializeJsonPretty(doc, filew); // write the Json Data to the FS
     filew.close();
+    esp_restart(); // reboot the esp32 uC
 }
 
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 void setup()
 {
     Serial.begin(115200);
-    WiFi.mode(WIFI_AP_STA); // AP + STA required because of wifi scan during AP  //WiFi.config(staticIP, gateway, subnet); // Set the static IP configuration
+    pinMode(pinRebootAP, INPUT_PULLDOWN);
+
     if (!SPIFFS.begin())
     {
         debugln("An Error has occurred while mounting SPIFFS");
@@ -168,6 +172,10 @@ void setup()
     DynamicJsonDocument doc(1024);
     File file = SPIFFS.open("/NetworkConfig.txt", "r");
     deserializeJson(doc, file);
+    if (digitalRead(pinRebootAP))
+    {
+        doc["isConfigured"] = false;
+    }
     if (DEBUG)
     {
         serializeJsonPretty(doc, Serial);
@@ -176,8 +184,11 @@ void setup()
 
     if (doc["isConfigured"] == true)
     {
+        WiFi.mode(WIFI_STA);
         const char *ssid = doc["Config-WiFi"][0];
         const char *password = doc["Config-WiFi"][1];
+        debugln(ssid);
+        debugln(password);
         WiFi.begin(ssid, password);
         while (WiFi.status() != WL_CONNECTED)
         {
@@ -188,7 +199,7 @@ void setup()
     }
     else
     {
-
+        WiFi.mode(WIFI_AP);
         WiFi.softAP(ssid);                            // Create the access point
         WiFi.softAPConfig(staticIP, gateway, subnet); // Set the static IP configuration
 
