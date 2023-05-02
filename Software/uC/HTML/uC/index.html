@@ -9,9 +9,17 @@
 </head>
 
 <body style="background-color: rgb(236, 236, 236);">
+    <style>
+        input {
+            height: 2em;
+            width: auto;
+            border-radius: 0.5em;
+            margin-top: 0.1em;
+        }
+    </style>
     <div
         style="background-color: rgb(215, 227, 255); border:0.25em rgb(0, 24, 109) solid; border-radius: 3em; margin: 2em;">
-        <div style="justify-content:center; display:flex">
+        <div style="justify-content:center; display:flex; margin-top: 2em">
             <h1>ESP32 Access Point Setup</h1>
             <br>
         </div>
@@ -24,7 +32,8 @@
                 <label for="saveWiFi">Save WiFi SSID and Password</label><br>
                 <br>
                 <input type="email" name="email-name" id="email-name" placeholder="Firebase-Email" required><br>
-                <input type="password" name="email-password" id="email-password" placeholder="Firebase-Password"required><br>
+                <input type="password" name="email-password" id="email-password" placeholder="Firebase-Password"
+                    required><br>
                 <input type="checkbox" name="saveFirebase" id="saveFirebase">
                 <label for="saveFirebase">Save Firebase credentials</label><br>
                 <br>
@@ -32,14 +41,6 @@
             </form>
         </div>
     </div>
-    <style>
-        input {
-            height: 2em;
-            width: auto;
-            border-radius: 0.5em;
-            margin-top: 0.1em;
-        }
-    </style>
 </body>
 
 </html>

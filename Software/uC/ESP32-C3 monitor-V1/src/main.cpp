@@ -1,27 +1,50 @@
 #include <Arduino.h>
 #include <WiFi.h>
-#include <WebServer.h>
+#include <SPIFFS.h>
+#include <ArduinoJson.h>
+#include <AsyncTCP.h>
+#include <ESPAsyncWebServer.h>
 
-const char *ssid = "ESP32-AP"; // Set the SSID (network name) of the access point
+#define DEBUG 1
+
+#ifdef DEBUG
+#define debug(x) Serial.print(x)
+#define debugln(x) Serial.println(x)
+#define debugf(x) Serial.printf(x)
+#else
+#define debug(x)
+#define debugln(x)
+#define debugf(x)
+#endif
+
+const char *ssid = "BatteryMagic-AP"; // Set the SSID (network name) of the access point
 
 IPAddress staticIP(192, 168, 0, 1); // Set your desired static IP address
 IPAddress gateway(192, 168, 0, 1);  // Set your network gateway address
 IPAddress subnet(255, 255, 255, 0); // Set your network subnet mask
 
-WebServer server(80); // Create a web server on port 80
+AsyncWebServer serverAP(80); // Create a web server on port 80
 
 static const char html[] PROGMEM = R"rawliteral(
-    <head>
+<html>
+<head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ESP32 AP Setup</title>
 </head>
-
 <body style="background-color: rgb(236, 236, 236);">
+    <style>
+        input {
+            height: 2em;
+            width: auto;
+            border-radius: 0.5em;
+            margin-top: 0.1em;
+        }
+    </style>
     <div
         style="background-color: rgb(215, 227, 255); border:0.25em rgb(0, 24, 109) solid; border-radius: 3em; margin: 2em;">
-        <div style="justify-content:center; display:flex">
+        <div style="justify-content:center; display:flex; margin: 2em">
             <h1>ESP32 Access Point Setup</h1>
             <br>
         </div>
@@ -34,7 +57,8 @@ static const char html[] PROGMEM = R"rawliteral(
                 <label for="saveWiFi">Save WiFi SSID and Password</label><br>
                 <br>
                 <input type="email" name="email-name" id="email-name" placeholder="Firebase-Email" required><br>
-                <input type="password" name="email-password" id="email-password" placeholder="Firebase-Password"required><br>
+                <input type="password" name="email-password" id="email-password" placeholder="Firebase-Password"
+                    required><br>
                 <input type="checkbox" name="saveFirebase" id="saveFirebase">
                 <label for="saveFirebase">Save Firebase credentials</label><br>
                 <br>
@@ -42,49 +66,140 @@ static const char html[] PROGMEM = R"rawliteral(
             </form>
         </div>
     </div>
-    <style>
-        input
-{
-height:
-  2em;
-width:
-  auto;
-  border - radius : 0.5em;
-  margin - top : 0.1em;
-} 
-</ style>
-    </ body>
-    </ html>)rawliteral";
+</body>
+</ html>)rawliteral";
 
-void handleRoot()
+static const char html_connected[] PROGMEM = R"rawliteral(
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body onload="window.close();">
+WiFi is set up. You can now close this window and disconnect from the Access Point.
+</body>
+</html>
+)rawliteral";
+
+void handleRoot(AsyncWebServerRequest *request)
 {
-  server.send(200, "text/html", html); // Serve the HTML page
+    request->send(200, "text/html", html); // Serve the HTML page
 }
 
-void handleConnect()
+void handleConnect(AsyncWebServerRequest *request)
 {
-  String ssid = server.arg("ssid");         // Read the SSID from the form data
-  String password = server.arg("password"); // Read the password from the form data
-  // Do something with the SSID and password (e.g. save to EEPROM or connect to Wi-Fi)
-  server.send(200, "text/plain", "Connected to Wi-Fi!"); // Send a response to the browser
-  Serial.println(ssid);
-  Serial.println(password);
+    String ssid = request->arg("ssid");         // Read the SSID from the form data
+    String password = request->arg("password"); // Read the password from the form data
+    String saveWiFi = request->arg("saveWiFi");
+
+    String email_name = request->arg("email-name");
+    String email_password = request->arg("email-password");
+    String saveFirebase = request->arg("saveFirebase");
+
+    request->send(200, "text/html", html_connected); // Send a response to the browser
+    serverAP.end();
+
+    debugln();
+    debugln("stopped Server AP");
+
+    DynamicJsonDocument doc(1024);
+    File filer = SPIFFS.open("/NetworkConfig.txt", "r");
+    deserializeJson(doc, filer);
+    filer.close();
+
+    debugln("---------------------------------------------------------------");
+    debugln(ssid);
+    debugln(password);
+    if (saveWiFi == "on")
+    {
+        debugln("save WiFi is on");
+        doc["Config-WiFi"][0] = ssid;
+        doc["Config-WiFi"][1] = password;
+        doc["isConfigured"] = true;
+    }
+    else
+    {
+        debugln("save WiFi is off");
+        doc["Config-WiFi"][0] = NULL;
+        doc["Config-WiFi"][1] = NULL;
+        doc["isConfigured"] = false;
+    }
+    debugln();
+
+    debugln(email_name);
+    debugln(email_password);
+    if (saveFirebase == "on")
+    {
+        debugln("save Firebase is on");
+        doc["Config-Firebase"][0] = email_name;
+        doc["Config-Firebase"][1] = email_password;
+    }
+    else
+    {
+        debugln("save Firebase is off");
+        doc["Config-Firebase"][0] = NULL;
+        doc["Config-Firebase"][1] = NULL;
+    }
+    debugln("----------------------------------------------------------------");
+
+    if (DEBUG)
+    {
+        serializeJsonPretty(doc, Serial);
+    }
+
+    File filew = SPIFFS.open("/NetworkConfig.txt", "w");
+    serializeJsonPretty(doc, filew);
+    filew.close();
 }
 
+//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 void setup()
 {
-  Serial.begin(115200);
-  WiFi.mode(WIFI_AP_STA);                       // AP + STA required because of wifi scan during AP  //WiFi.config(staticIP, gateway, subnet); // Set the static IP configuration
-  WiFi.softAP(ssid);                            // Create the access point
-  WiFi.softAPConfig(staticIP, gateway, subnet); // Set the static IP configuration
-  Serial.println("Access point created");
-  Serial.println("IP address: " + WiFi.softAPIP().toString()); // Print the IP address of the access point
-  server.on("/", handleRoot);
-  server.on("/connect", handleConnect);
-  server.begin(); // Start the web server
+    Serial.begin(115200);
+    WiFi.mode(WIFI_AP_STA); // AP + STA required because of wifi scan during AP  //WiFi.config(staticIP, gateway, subnet); // Set the static IP configuration
+    if (!SPIFFS.begin())
+    {
+        debugln("An Error has occurred while mounting SPIFFS");
+        return;
+    }
+
+    DynamicJsonDocument doc(1024);
+    File file = SPIFFS.open("/NetworkConfig.txt", "r");
+    deserializeJson(doc, file);
+    if (DEBUG)
+    {
+        serializeJsonPretty(doc, Serial);
+    }
+    file.close();
+
+    if (doc["isConfigured"] == true)
+    {
+        const char *ssid = doc["Config-WiFi"][0];
+        const char *password = doc["Config-WiFi"][1];
+        WiFi.begin(ssid, password);
+        while (WiFi.status() != WL_CONNECTED)
+        {
+            debug(".");
+            delay(2000);
+        }
+        debugln(WiFi.localIP());
+    }
+    else
+    {
+
+        WiFi.softAP(ssid);                            // Create the access point
+        WiFi.softAPConfig(staticIP, gateway, subnet); // Set the static IP configuration
+
+        debugln("Access point created");
+        debugln("IP address: " + WiFi.softAPIP().toString()); // Print the IP address of the access point
+        serverAP.on("/", HTTP_GET, handleRoot);               // Handle GET requests to the root URL
+        serverAP.on("/connect", HTTP_POST, handleConnect);    // Handle POST requests to the "/connect" URL
+        serverAP.begin();                                     // Start the web serverAP
+    }
 }
 
 void loop()
 {
-  server.handleClient(); // Handle incoming client requests
 }
