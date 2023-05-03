@@ -61,14 +61,6 @@
             margin-top: 40px;
             border: 2px #03e9f4 solid;
         }
-
-        .login-box .user-box div .checkDiv label {
-            display: inline-block;
-        }
-
-        .login-box .user-box div .checkDiv {
-            display: block;
-        }
     </style>
     <div class="login-box">
         <h2>Login WiFi</h2>
@@ -76,18 +68,20 @@
             <div class="user-box">
                 <input type='text' id='ssid' name='ssid' placeholder="WiFi SSID" required><br>
                 <input type='password' id='password' name='password' placeholder="WiFi-Password" required><br>
-                <div class="checkDiv">
-                    <input type="checkbox" name="saveWiFi" id="saveWiFi">
-                    <label for="saveWiFi" style="color: #fff;">Save WiFi SSID and Password</label>
+                <div style="display: block;">
+                    <input type="checkbox" name="saveWiFi" id="saveWiFi" style="display: inline-block">
+                    <label for="saveWiFi" style="color: #fff; display: inline-block;">Save WiFi SSID and
+                        Password</label>
                 </div>
 
                 <h2 style="margin-top: 3em;">Login Firebase</h2>
                 <input type="email" name="email-name" id="email-name" placeholder="Firebase-Email" required><br>
                 <input type="password" name="email-password" id="email-password" placeholder="Firebase-Password"
                     required><br>
-                <div class="checkDiv">
-                    <input type="checkbox" name="saveFirebase" id="saveFirebase">
-                    <label for="saveFirebase" style="color: #fff;">Save Firebase credentials</label>
+                <div style="display: block;">
+                    <input type="checkbox" name="saveFirebase" id="saveFirebase" style="display: inline-block">
+                    <label for="saveFirebase" style="color: #fff; display: inline-block;">Save Firebase
+                        credentials</label>
                 </div>
                 <br>
             </div>
