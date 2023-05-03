@@ -1,9 +1,13 @@
 #include <Arduino.h>
 #include <WiFi.h>
+#include <FirebaseESP32.h>
 #include <SPIFFS.h>
 #include <ArduinoJson.h>
 #include <AsyncTCP.h>
 #include <ESPAsyncWebServer.h>
+// Provide the token generation process info.
+#include "addons/TokenHelper.h"
+#include "addons/RTDBHelper.h"
 
 #define pinRebootAP 14
 
@@ -19,6 +23,9 @@
 #define debugf(x)
 #endif
 
+// Insert Firebase project API Key
+#define API_KEY "AIzaSyBHIc9XTrsoHxUlgKc1kuCGbg0P6JbSXSY"
+
 const char *ssid = "BatteryMagic-AP"; // Set the SSID (network name) of the access point
 
 IPAddress staticIP(192, 168, 0, 1); // Set your desired static IP address
@@ -27,52 +34,100 @@ IPAddress subnet(255, 255, 255, 0); // Set your network subnet mask
 
 AsyncWebServer serverAP(80); // Create a web server on port 80
 
+// Define Firebase objects
+FirebaseData fbdo;
+FirebaseAuth auth;
+FirebaseConfig config;
+String uid;
+
 static const char html[] PROGMEM = R"rawliteral(
 <html>
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ESP32 AP Setup</title>
+    <title>ESP32 form test</title>
 </head>
-<body style="background-color: rgb(236, 236, 236);">
+
+<body>
     <style>
-        input {
-            height: 2em;
-            width: auto;
-            border-radius: 0.5em;
-            margin-top: 0.1em;
+        html {
+            height: 100%;
+            background: linear-gradient(#141e30, #243b55);
+            margin: 0;
+            padding: 0;
         }
 
-        input:focus {
-            height: 2.5em;
-            border-color: crimson;
-            border-width: 0.2em;
+        .login-box {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 400px;
+            padding: 40px;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.5);
+            box-sizing: border-box;
+            box-shadow: 0 15px 25px rgba(0, 0, 0, 0.6);
+            border-radius: 10px;
+        }
+
+        .login-box h2 {
+            margin: 0 0 30px;
+            color: white;
+            text-align: center;
+        }
+
+        .login-box .user-box {
+            position: relative;
+        }
+
+        .login-box .user-box input {
+            width: 100%;
+            padding: 10px 0;
+            font-size: 16px;
+            color: #fff;
+            margin-bottom: 30px;
+            border: none;
+            border-bottom: 2px solid #adadad;
+            outline: none;
+            background: transparent;
+        }
+
+        .login-box form .submit {
+            position: relative;
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #03e9f4;
+            font-size: 16px;
+            text-decoration: none;
+            text-transform: uppercase;
+            overflow: hidden;
+            margin-top: 40px;
+            border: 2px #03e9f4 solid;
         }
     </style>
-    <div
-        style="background-color: rgb(215, 227, 255); border:0.25em rgb(0, 24, 109) solid; border-radius: 3em; margin: 2em;">
-        <div style="justify-content:center; display:flex; margin: 2em">
-            <h1>ESP32 Access Point Setup</h1>
-            <br>
-        </div>
-        <div style="justify-content:center; display:flex;">
-            <form method='post' action='/connect'>
-                <br>
+    <div class="login-box">
+        <h2>Login WiFi</h2>
+        <form method='post' action='/connect'>
+            <div class="user-box">
                 <input type='text' id='ssid' name='ssid' placeholder="WiFi SSID" required><br>
                 <input type='password' id='password' name='password' placeholder="WiFi-Password" required><br>
-                <input type="checkbox" name="saveWiFi" id="saveWiFi">
-                <label for="saveWiFi">Save WiFi SSID and Password</label><br>
-                <br>
+                <div style="display: block;">
+                    <input type="checkbox" name="saveWiFi" id="saveWiFi" style="display: inline-block">
+                    <label for="saveWiFi" style="color: #fff; display: inline-block;">Save WiFi SSID and
+                        Password</label>
+                </div>
+
+                <h2 style="margin-top: 3em;">Login Firebase</h2>
                 <input type="email" name="email-name" id="email-name" placeholder="Firebase-Email" required><br>
                 <input type="password" name="email-password" id="email-password" placeholder="Firebase-Password"
                     required><br>
-                <input type="checkbox" name="saveFirebase" id="saveFirebase">
-                <label for="saveFirebase">Save Firebase credentials</label><br>
+                <div style="display: block;">
+                    <input type="checkbox" name="saveFirebase" id="saveFirebase" style="display: inline-block">
+                    <label for="saveFirebase" style="color: #fff; display: inline-block;">Save Firebase
+                        credentials</label>
+                </div>
                 <br>
-                <input type='submit' value='Connect' style="margin-bottom: 1em;">
-            </form>
-        </div>
+            </div>
+            <input class="submit" type='submit' value='Connect'>
+        </form>
     </div>
 </body>
 </ html>)rawliteral";
@@ -202,6 +257,36 @@ void setup()
             delay(2000);
         }
         debugln(WiFi.localIP());
+
+        // Assign the api key (required)
+        config.api_key = API_KEY;
+        // Assign the user sign in credentials
+        MB_String email = doc["Config-Firebase"][0];
+        auth.user.email = email;
+        MB_String password = doc["Config-Firebase"][1];
+        auth.user.password = password;
+
+        Firebase.reconnectWiFi(true);
+        fbdo.setResponseSize(4096);
+
+        // Assign the callback function for the long running token generation task
+        config.token_status_callback = tokenStatusCallback; // see addons/TokenHelper.h
+        // Assign the maximum retry of token generation
+        config.max_token_generation_retry = 5;
+        // Initialize the library with the Firebase authen and config
+        Firebase.begin(&config, &auth);
+
+        // Getting the user UID might take a few seconds
+        Serial.println("Getting User UID");
+        while ((auth.token.uid) == "")
+        {
+            Serial.print('.');
+            delay(1000);
+        }
+        // Print user UID
+        uid = auth.token.uid.c_str();
+        Serial.print("User UID: ");
+        Serial.print(uid);
     }
     else
     {
@@ -210,13 +295,17 @@ void setup()
         WiFi.softAPConfig(staticIP, gateway, subnet); // Set the static IP configuration
 
         debugln("Access point created");
-        debugln("IP address: " + WiFi.softAPIP().toString()); // Print the IP address of the access point
-        serverAP.on("/", HTTP_GET, handleRoot);               // Handle GET requests to the root URL
-        serverAP.on("/connect", HTTP_POST, handleConnect);    // Handle POST requests to the "/connect" URL
-        serverAP.begin();                                     // Start the web serverAP
+        // debugln("IP address: " + WiFi.softAPIP().toString()); // Print the IP address of the access point
+        serverAP.on("/", HTTP_GET, handleRoot);            // Handle GET requests to the root URL
+        serverAP.on("/connect", HTTP_POST, handleConnect); // Handle POST requests to the "/connect" URL
+        serverAP.begin();                                  // Start the web serverAP
     }
 }
 
 void loop()
 {
+    if (Firebase.isTokenExpired()){
+    Firebase.refreshToken(&config);
+    Serial.println("Refresh token");
+  }
 }
