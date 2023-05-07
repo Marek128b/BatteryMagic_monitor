@@ -12,44 +12,16 @@
 
 <body>
     <h1>Dashboard</h1>
-    <div style="height: 25%; width: 50%;">
-        <canvas id="myFirstChart"></canvas>
+    <div class="dashboards">
+        <div class="dashboard">
+            <h3>Battery #1</h3>
+            <canvas id="myFirstChart"></canvas>
+        </div>
     </div>
 
     <!--script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script-->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-    <script>
-        let firstChart = document.getElementById("myFirstChart");
-
-        let chart = new Chart(firstChart, {
-            type: 'line',
-            data: {
-                labels: ["07.05.2023 - 10:20", "07.05.2023 - 10:25", "07.05.2023 - 10:30", "07.05.2023 - 10:35", "07.05.2023 - 10:40", "07.05.2023 - 10:45"],
-                datasets: [{
-                    label: "Battery1 data",
-                    data: [
-                        4.2,
-                        3.7,
-                        4.0,
-                        4.1,
-                        4.0,
-                        3.8
-                    ],
-                    color: 'rgba(0, 0, 200, 0.5)',
-                    borderColor: 'rgba(0, 0, 255, 1)'
-                }]
-            },
-            options: {
-                animation: {
-                    duration: 500, // general animation time
-                },
-                hover: {
-                    animationDuration: 0, // duration of animations when hovering an item
-                }
-            }
-        });
-    </script>
+    <script src="chartsScript.js" type="module"></script>
 </body>
 
 </html>
