@@ -1,10 +1,10 @@
 {
   "Config-WiFi": [
-    "SSID",
+    "ssid",
     "password"
   ],
   "Config-Firebase": [
-    "gmail",
+    "username",
     "password"
   ],
   "isConfigured" : false

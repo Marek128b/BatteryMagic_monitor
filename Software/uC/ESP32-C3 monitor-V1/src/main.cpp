@@ -5,9 +5,20 @@
 #include <ArduinoJson.h>
 #include <AsyncTCP.h>
 #include <ESPAsyncWebServer.h>
+<<<<<<< HEAD
 // Provide the token generation process info.
 #include "addons/TokenHelper.h"
 #include "addons/RTDBHelper.h"
+=======
+#include <FirebaseESP32.h>
+// Provide the token generation process info.
+#include "addons/TokenHelper.h"
+// Provide the RTDB payload printing info and other helper functions.
+#include "addons/RTDBHelper.h"
+
+// Insert Firebase project API Key
+#define API_KEY "AIzaSyBHIc9XTrsoHxUlgKc1kuCGbg0P6JbSXSY" //"REPLACE_WITH_YOUR_FIREBASE_PROJECT_API_KEY"
+>>>>>>> 27a45547a4c88b36f408088008f995a4fd2bb3d8
 
 #define pinRebootAP 14
 
@@ -38,6 +49,11 @@ AsyncWebServer serverAP(80); // Create a web server on port 80
 FirebaseData fbdo;
 FirebaseAuth auth;
 FirebaseConfig config;
+<<<<<<< HEAD
+=======
+
+// Variable to save USER UID
+>>>>>>> 27a45547a4c88b36f408088008f995a4fd2bb3d8
 String uid;
 
 static const char html[] PROGMEM = R"rawliteral(
@@ -148,103 +164,113 @@ WiFi is set up. You can now close this window and disconnect from the Access Poi
 
 void handleRoot(AsyncWebServerRequest *request)
 {
-    request->send(200, "text/html", html); // Serve the HTML page
+  request->send(200, "text/html", html); // Serve the HTML page
 }
 
 void handleConnect(AsyncWebServerRequest *request)
 {
-    String ssid = request->arg("ssid");         // Read the SSID from the form data
-    String password = request->arg("password"); // Read the password from the form data
-    String saveWiFi = request->arg("saveWiFi");
+  String ssid = request->arg("ssid");         // Read the SSID from the form data
+  String password = request->arg("password"); // Read the password from the form data
+  String saveWiFi = request->arg("saveWiFi");
 
-    String email_name = request->arg("email-name");
-    String email_password = request->arg("email-password");
-    String saveFirebase = request->arg("saveFirebase");
+  String email_name = request->arg("email-name");
+  String email_password = request->arg("email-password");
+  String saveFirebase = request->arg("saveFirebase");
 
-    request->send(200, "text/html", html_connected); // Send a response to the browser
-    serverAP.end();
+  request->send(200, "text/html", html_connected); // Send a response to the browser
+  serverAP.end();
 
-    debugln();
-    debugln("stopped Server AP");
+  debugln();
+  debugln("stopped Server AP");
 
-    DynamicJsonDocument doc(1024);
-    File filer = SPIFFS.open("/NetworkConfig.txt", "r");
-    deserializeJson(doc, filer);
-    filer.close();
+  DynamicJsonDocument doc(1024);
+  File filer = SPIFFS.open("/NetworkConfig.txt", "r");
+  deserializeJson(doc, filer);
+  filer.close();
 
-    debugln("---------------------------------------------------------------");
-    debugln(ssid);
-    debugln(password);
-    if (saveWiFi == "on")
-    {
-        debugln("save WiFi is on");
-        doc["Config-WiFi"][0] = ssid;
-        doc["Config-WiFi"][1] = password;
-        doc["isConfigured"] = true;
-    }
-    else
-    {
-        debugln("save WiFi is off");
-        doc["Config-WiFi"][0] = NULL;
-        doc["Config-WiFi"][1] = NULL;
-        doc["isConfigured"] = false;
-    }
-    debugln();
+  debugln("---------------------------------------------------------------");
+  debugln(ssid);
+  debugln(password);
+  if (saveWiFi == "on")
+  {
+    debugln("save WiFi is on");
+    doc["Config-WiFi"][0] = ssid;
+    doc["Config-WiFi"][1] = password;
+    doc["isConfigured"] = true;
+  }
+  else
+  {
+    debugln("save WiFi is off");
+    doc["Config-WiFi"][0] = NULL;
+    doc["Config-WiFi"][1] = NULL;
+    doc["isConfigured"] = false;
+  }
+  debugln();
 
-    debugln(email_name);
-    debugln(email_password);
-    if (saveFirebase == "on")
-    {
-        debugln("save Firebase is on");
-        doc["Config-Firebase"][0] = email_name;
-        doc["Config-Firebase"][1] = email_password;
-    }
-    else
-    {
-        debugln("save Firebase is off");
-        doc["Config-Firebase"][0] = NULL;
-        doc["Config-Firebase"][1] = NULL;
-    }
-    debugln("----------------------------------------------------------------");
+  debugln(email_name);
+  debugln(email_password);
+  if (saveFirebase == "on")
+  {
+    debugln("save Firebase is on");
+    doc["Config-Firebase"][0] = email_name;
+    doc["Config-Firebase"][1] = email_password;
+  }
+  else
+  {
+    debugln("save Firebase is off");
+    doc["Config-Firebase"][0] = NULL;
+    doc["Config-Firebase"][1] = NULL;
+  }
+  debugln("----------------------------------------------------------------");
 
-    if (DEBUG)
-    {
-        serializeJsonPretty(doc, Serial);
-    }
+  if (DEBUG)
+  {
+    serializeJsonPretty(doc, Serial);
+  }
 
-    File filew = SPIFFS.open("/NetworkConfig.txt", "w");
-    serializeJsonPretty(doc, filew); // write the Json Data to the FS
-    filew.close();
-    esp_restart(); // reboot the esp32 uC
+  File filew = SPIFFS.open("/NetworkConfig.txt", "w");
+  serializeJsonPretty(doc, filew); // write the Json Data to the FS
+  filew.close();
+  esp_restart(); // reboot the esp32 uC
 }
 
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 void setup()
 {
-    Serial.begin(115200);
-    pinMode(pinRebootAP, INPUT_PULLDOWN);
+  Serial.begin(115200);
+  pinMode(pinRebootAP, INPUT_PULLDOWN);
 
-    if (!SPIFFS.begin())
-    {
-        debugln("An Error has occurred while mounting SPIFFS");
-        return;
-    }
+  if (!SPIFFS.begin())
+  {
+    debugln("An Error has occurred while mounting SPIFFS");
+    return;
+  }
 
-    DynamicJsonDocument doc(1024);
-    File file = SPIFFS.open("/NetworkConfig.txt", "r");
-    deserializeJson(doc, file);
-    if (digitalRead(pinRebootAP))
-    {
-        doc["isConfigured"] = false;
-    }
-    if (DEBUG)
-    {
-        serializeJsonPretty(doc, Serial);
-    }
-    file.close();
+  DynamicJsonDocument doc(1024);
+  File file = SPIFFS.open("/NetworkConfig.txt", "r");
+  deserializeJson(doc, file);
+  if (digitalRead(pinRebootAP))
+  {
+    doc["isConfigured"] = false;
+  }
+  if (DEBUG)
+  {
+    serializeJsonPretty(doc, Serial);
+  }
+  file.close();
 
-    if (doc["isConfigured"] == true)
+  if (doc["isConfigured"] == true)
+  {
+    WiFi.mode(WIFI_STA);
+    const char *ssid = doc["Config-WiFi"][0];
+    const char *password = doc["Config-WiFi"][1];
+    debugln();
+    debugln(ssid);
+    debugln(password);
+    WiFi.begin(ssid, password);
+    while (WiFi.status() != WL_CONNECTED)
     {
+<<<<<<< HEAD
         WiFi.mode(WIFI_STA);
         const char *ssid = doc["Config-WiFi"][0];
         const char *password = doc["Config-WiFi"][1];
@@ -299,12 +325,82 @@ void setup()
         serverAP.on("/", HTTP_GET, handleRoot);            // Handle GET requests to the root URL
         serverAP.on("/connect", HTTP_POST, handleConnect); // Handle POST requests to the "/connect" URL
         serverAP.begin();                                  // Start the web serverAP
+=======
+      debug(".");
+      delay(2000);
     }
+    debugln(WiFi.localIP());
+
+    // Assign the api key (required)
+    config.api_key = API_KEY;
+
+    // Assign the user sign in credentials
+    // auth.user.email = "email";
+    // auth.user.password = "password";
+    const char *userEmail = doc["Config-Firebase"][0];
+    debugln(userEmail);
+    // auth.user.email = userEmail;
+    const char *userPassword = doc["Config-Firebase"][1];
+    debugln(userPassword);
+    // auth.user.email = userPassword;
+
+    // Initialize the library with the Firebase authen and config
+    Firebase.begin(API_KEY);
+
+    // Authenticate with Firebase using email and password
+    if (auth.signInWithEmailAndPassword(userEmail, userPassword))
+    {
+      Serial.println("Authenticated with Firebase");
+    }
+    else
+    {
+      Serial.println("Failed to authenticate with Firebase");
+      return;
+>>>>>>> 27a45547a4c88b36f408088008f995a4fd2bb3d8
+    }
+
+    // Assign the callback function for the long running token generation task
+    config.token_status_callback = tokenStatusCallback; // see addons/TokenHelper.h
+
+    // Assign the maximum retry of token generation
+    config.max_token_generation_retry = 5;
+
+    // Getting the user UID might take a few seconds
+    Serial.println("Getting User UID");
+    while ((auth.token.uid) == "")
+    {
+      Serial.print('.');
+      delay(1000);
+    }
+    // Print user UID
+    uid = auth.token.uid.c_str();
+    Serial.print("User UID: ");
+    Serial.print(uid);
+  }
+  else
+  {
+    WiFi.mode(WIFI_AP);
+    WiFi.softAP(ssid);                            // Create the access point
+    WiFi.softAPConfig(staticIP, gateway, subnet); // Set the static IP configuration
+
+    debugln("Access point created");
+
+    debug("\nIP address: "); // Print the IP address of the access point
+    debugln(WiFi.softAPIP().toString());
+    serverAP.on("/", HTTP_GET, handleRoot);            // Handle GET requests to the root URL
+    serverAP.on("/connect", HTTP_POST, handleConnect); // Handle POST requests to the "/connect" URL
+    serverAP.begin();                                  // Start the web serverAP
+  }
 }
 
 void loop()
 {
+<<<<<<< HEAD
     if (Firebase.isTokenExpired()){
+=======
+  if (Firebase.isTokenExpired())
+  {
+>>>>>>> 27a45547a4c88b36f408088008f995a4fd2bb3d8
     Firebase.refreshToken(&config);
     Serial.println("Refresh token");
   }
