@@ -16,7 +16,9 @@
         <canvas id="myFirstChart"></canvas>
     </div>
 
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
+    <!--script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script-->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <script>
         let firstChart = document.getElementById("myFirstChart");
 
@@ -34,8 +36,8 @@
                         4.0,
                         3.8
                     ],
-                    backgroundColor: ['rgba(0, 0, 200, 0.4)'],
-                    borderColor: ['rgba(0, 0, 255, 1)']
+                    color: 'rgba(0, 0, 200, 0.5)',
+                    borderColor: 'rgba(0, 0, 255, 1)'
                 }]
             },
             options: {
@@ -44,13 +46,6 @@
                 },
                 hover: {
                     animationDuration: 0, // duration of animations when hovering an item
-                },
-                scales: {
-                    yAxes: [{
-                        ticks: {
-                            beginAtZero: true
-                        }
-                    }]
                 }
             }
         });
