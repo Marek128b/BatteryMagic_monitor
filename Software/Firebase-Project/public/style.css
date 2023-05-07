@@ -27,7 +27,7 @@ body {
 
 /* LOGO */
 .logo {
-    font-size: 32px;
+    font-size: 24px;
 }
 
 @media screen and (max-width: 600px) {
