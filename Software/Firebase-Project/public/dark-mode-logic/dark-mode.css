@@ -1,0 +1,56 @@
+html,
+body {
+    margin: 0;
+    padding: 0;
+    background: rgb(49, 77, 77);
+    background: linear-gradient(-180deg, rgb(32, 38, 57) 11.4%, rgb(63, 76, 119) 70.2%);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+.dashboard {
+    background-color: #141a26;
+    background-size: cover;
+}
+
+.dashboard h2 {
+    color: aliceblue;
+}
+
+
+header {
+    font-size: 28px;
+    font-weight: 600;
+    color: #ffffff;
+    text-align: center;
+}
+
+.form {
+    position: absolute;
+    max-width: 430px;
+    width: 100%;
+    padding: 30px;
+    border-radius: 6px;
+    background: #141a26;
+}
+
+.form-link span {
+    font-size: 14px;
+    font-weight: 400;
+    color: #b5b5b5;
+}
+
+.line::before {
+    background-color: #141a26;
+}
+
+a.google {
+    border: 1px solid #ffffff;
+    background-color: #ffffff;
+}
+
+a.google span {
+    font-weight: 500;
+    opacity: 0.6;
+    color: #000000;
+}
