@@ -12,8 +12,8 @@ const runColorMode = (fn) => {
 
 runColorMode((isDarkMode) => {
     if (isDarkMode) {
-        document.body.classList.add('dark-mode');
+        document.querySelector('body').classList.add('dark-mode');
     } else {
-        document.body.classList.remove('dark-mode');
+        document.querySelector('body').classList.remove('dark-mode');
     }
 })

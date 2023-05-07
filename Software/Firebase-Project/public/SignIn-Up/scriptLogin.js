@@ -1,4 +1,4 @@
-import { getAuth, signInWithPopup, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/9.21.0/firebase-auth.js";
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/9.21.0/firebase-auth.js";
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.21.0/firebase-app.js'
 import { getDatabase, ref, child, get } from 'https://www.gstatic.com/firebasejs/9.21.0/firebase-database.js'
 
@@ -21,6 +21,61 @@ initializeApp(firebaseConfig);
 const provider = new GoogleAuthProvider();
 const auth = getAuth();
 
+//Sign Up with Email and Password
+const buttonSignUp = document.getElementById("SignupButton");
+buttonSignUp.addEventListener("click", function (e) {
+
+    const email = document.getElementById("SignupEmail").value;
+    const password1 = document.getElementById("SignupPassword1").value;
+    const password2 = document.getElementById("SignupPassword2").value;
+
+    if (password1 == password2) {
+        console.log("passwords are equal.. SignUp");
+        createUserWithEmailAndPassword(auth, email, password1)
+            .then((userCredential) => {
+                // Signed in 
+                const user = userCredential.user;
+
+                console.log("Signed In and Created User");
+                // ...
+
+                //redirect to Home
+                window.location.href = "../index.html";
+            })
+            .catch((error) => {
+                const errorCode = error.code;
+                const errorMessage = error.message;
+                // ..
+            });
+    }
+});
+
+
+//Sign In with Email and Password
+const buttonLogin = document.getElementById("LoginButton");
+buttonLogin.addEventListener("click", function (e) {
+
+    const email = document.getElementById("LoginEmail").value;
+    const password = document.getElementById("LoginPassword").value;
+
+    signInWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+            // Signed in 
+            console.log("Signed in");
+            const user = userCredential.user;
+            // ...
+
+            //redirect to Home
+            window.location.href = "../index.html";
+        })
+        .catch((error) => {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+        });
+});
+
+
+//Sign In with Google Auth
 const button = document.getElementById("loginWithgoogleButton");
 button.addEventListener("click", function (e) {
     signInWithPopupClick();
