@@ -1,0 +1,72 @@
+{
+    "Users": [
+        {
+            "UserID": [
+                {
+                    "Device Name": [
+                        {
+                            "data": [
+                                {
+                                    "timestamp": 1683457872,
+                                    "type": "6s",
+                                    "voltages": [
+                                        "1s",
+                                        "2s",
+                                        "3s",
+                                        "4s",
+                                        "5s",
+                                        "6s"
+                                    ],
+                                    "error": null
+                                },
+                                {
+                                    "timestamp": 1683457072,
+                                    "type": "6s",
+                                    "voltages": [
+                                        "1s",
+                                        "2s",
+                                        "3s",
+                                        "4s",
+                                        "5s",
+                                        "6s"
+                                    ],
+                                    "error": "USB-PD-Fail"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "Device Name 2": [
+                        {
+                            "data": [
+                                {
+                                    "timestamp": 1683456872,
+                                    "type": "4s",
+                                    "voltages": [
+                                        "1s",
+                                        "2s",
+                                        "3s",
+                                        "4s"
+                                    ],
+                                    "error": null
+                                },
+                                {
+                                    "timestamp": 1683455572,
+                                    "type": "4s",
+                                    "voltages": [
+                                        "1s",
+                                        "2s",
+                                        "3s",
+                                        "4s"
+                                    ],
+                                    "error": null
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
