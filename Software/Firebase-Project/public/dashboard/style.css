@@ -69,7 +69,13 @@ body {
     padding: 50px 50px;
     text-align: center;
     height: auto;
-    width: 40%;
+    width: 50vw;
+}
+
+@media screen and (max-width: 800px) {
+    .dashboards {
+        width: 80vw;
+    }
 }
 
 .dashboard {

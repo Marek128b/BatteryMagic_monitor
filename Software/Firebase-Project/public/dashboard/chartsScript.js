@@ -1,13 +1,41 @@
 // Note: changes to the plugin code is not reflected to the chart, because the plugin is loaded at chart construction time and editor changes only trigger an chart.update().
-const plugin = {
-    id: 'plugin',
-    bevoreDraw(chart, args, plugins) {
-        const { ctx, chartArea: { top, bottom, left, right, width, height } } = chart;
-        ctx.save();
-        ctx.fillStyle = 'rgba(0, 0, 200, 1)';
-        ctx.fillRect(left, top, width, height);
-    }
+
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.21.0/firebase-app.js'
+import { getDatabase, ref, child, get } from 'https://www.gstatic.com/firebasejs/9.21.0/firebase-database.js'
+
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+    apiKey: "AIzaSyBHIc9XTrsoHxUlgKc1kuCGbg0P6JbSXSY",
+    authDomain: "magicbattery-1abba.firebaseapp.com",
+    databaseURL: "https://magicbattery-1abba-default-rtdb.europe-west1.firebasedatabase.app",
+    projectId: "magicbattery-1abba",
+    storageBucket: "magicbattery-1abba.appspot.com",
+    messagingSenderId: "299109678971",
+    appId: "1:299109678971:web:28eb7629059c68c4cf07de",
+    measurementId: "G-F2QCJ3GG6E"
 };
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+
+//init service
+const rtdb = getDatabase();
+
+//firebase rtdb reference
+const dbRef = ref(rtdb);
+
+//get data from rtdb
+get(child(dbRef, "/Users/" + window.uid + "/Device Name")).then((snapshot) => {
+    if (snapshot.exists()) {
+        console.log(snapshot.val());
+    } else {
+        console.log("No data available");
+    }
+}).catch((error) => {
+    console.error(error);
+});
+
 let chart = new Chart(document.getElementById("myFirstChart"), {
     type: 'line',
     data: {
@@ -50,7 +78,6 @@ let chart = new Chart(document.getElementById("myFirstChart"), {
             y: {
                 beginAtZero: true
             }
-        },
-        plugins: [plugin],
+        }
     }
 });
