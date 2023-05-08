@@ -12,7 +12,9 @@
 #include "addons/RTDBHelper.h"
 
 unsigned long lastInterval = 0;
-unsigned long interval = 50000;
+unsigned long interval = 5000;
+
+unsigned long interator = 0;
 
 #define pinRebootAP 14
 
@@ -250,20 +252,21 @@ void writeRTDB()
   debug("\ntime: ");
   debugln(timestamp);
 
-  // json.set(, String(timestamp));
-
-  char jsonData[256];
-  sniprintf(jsonData, sizeof(jsonData), "{timestamp: %d, type: '6s', voltages: ['1s', '2s', '3s', '4s', '5s', '6s']}", timestamp);
-  debugln(jsonData);
-  // json.setJsonData(jsonData);
-
-  json.set("/time", String(timestamp));
+  json.set("/timestamp", String(timestamp));
+  json.set("/type", String("6s"));
+  json.set("/voltages/0", "1s");
+  json.set("/voltages/1", "2s");
+  json.set("/voltages/2", "3s");
+  json.set("/voltages/3", "4s");
+  json.set("/voltages/4", "5s");
+  json.set("/voltages/5", "6s");
+  json.set("/error", String("NULL"));
 
   char dbPath[256];
-  snprintf(dbPath, sizeof(dbPath), "Users/%s/data", uid.c_str());
+  snprintf(dbPath, sizeof(dbPath), "Users/%s/%s/data/%d", uid.c_str(), "BatteryName", interator);
   debugln(dbPath);
 
-  Serial.printf("Set json... %s\n", Firebase.RTDB.setJSON(&fbdo, "Users/data", &json) ? "ok" : fbdo.errorReason().c_str());
+  Serial.printf("Set json... %s\n", Firebase.RTDB.setJSON(&fbdo, dbPath, &json) ? "ok" : fbdo.errorReason().c_str());
 }
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 void setup()
@@ -358,6 +361,7 @@ void loop()
   if (Firebase.ready() && (millis() - lastInterval >= interval))
   {
     writeRTDB();
+    interator++;
     lastInterval = millis();
   }
 
