@@ -1,4 +1,4 @@
-import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/9.21.0/firebase-auth.js";
+import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/9.21.0/firebase-auth.js";
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.21.0/firebase-app.js'
 import { getDatabase, ref, child, get } from 'https://www.gstatic.com/firebasejs/9.21.0/firebase-database.js'
 
@@ -40,7 +40,6 @@ buttonSignUp.addEventListener("click", function (e) {
                 // ...
                 document.getElementById("SignIn-SignUp_Label").innerHTML = "SignedIn";
                 window.isSignedIn = true;
-
                 //redirect to Home
                 window.location.href = "../index.html";
             })
@@ -82,6 +81,8 @@ buttonLogin.addEventListener("click", function (e) {
 const button = document.getElementById("loginWithgoogleButton");
 button.addEventListener("click", function (e) {
     signInWithPopupClick();
+    //redirect to Home
+    window.location.href = "../index.html";
 });
 
 function signInWithPopupClick() {
@@ -97,7 +98,6 @@ function signInWithPopupClick() {
 
             document.getElementById("SignIn-SignUp_Label").innerHTML = "SignedIn";
             window.isSignedIn = true;
-
             // ...
         }).catch((error) => {
             // Handle Errors here.
@@ -111,3 +111,17 @@ function signInWithPopupClick() {
         });
 }
 
+
+//getThe current User
+onAuthStateChanged(auth, (user) => {
+    if (user) {
+        // User is signed in, see docs for a list of available properties
+        // https://firebase.google.com/docs/reference/js/firebase.User
+        const uid = user.uid;
+        console.log(uid);
+        // ...
+    } else {
+        // User is signed out
+        // ...
+    }
+});

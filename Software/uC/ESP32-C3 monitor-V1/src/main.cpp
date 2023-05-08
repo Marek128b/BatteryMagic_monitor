@@ -5,20 +5,10 @@
 #include <ArduinoJson.h>
 #include <AsyncTCP.h>
 #include <ESPAsyncWebServer.h>
-<<<<<<< HEAD
-// Provide the token generation process info.
-#include "addons/TokenHelper.h"
-#include "addons/RTDBHelper.h"
-=======
-#include <FirebaseESP32.h>
-// Provide the token generation process info.
-#include "addons/TokenHelper.h"
-// Provide the RTDB payload printing info and other helper functions.
-#include "addons/RTDBHelper.h"
 
-// Insert Firebase project API Key
-#define API_KEY "AIzaSyBHIc9XTrsoHxUlgKc1kuCGbg0P6JbSXSY" //"REPLACE_WITH_YOUR_FIREBASE_PROJECT_API_KEY"
->>>>>>> 27a45547a4c88b36f408088008f995a4fd2bb3d8
+// Provide the token generation process info.
+#include "addons/TokenHelper.h"
+#include "addons/RTDBHelper.h"
 
 #define pinRebootAP 14
 
@@ -27,11 +17,9 @@
 #ifdef DEBUG
 #define debug(x) Serial.print(x)
 #define debugln(x) Serial.println(x)
-#define debugf(x) Serial.printf(x)
 #else
 #define debug(x)
 #define debugln(x)
-#define debugf(x)
 #endif
 
 // Insert Firebase project API Key
@@ -49,11 +37,8 @@ AsyncWebServer serverAP(80); // Create a web server on port 80
 FirebaseData fbdo;
 FirebaseAuth auth;
 FirebaseConfig config;
-<<<<<<< HEAD
-=======
 
 // Variable to save USER UID
->>>>>>> 27a45547a4c88b36f408088008f995a4fd2bb3d8
 String uid;
 
 static const char html[] PROGMEM = R"rawliteral(
@@ -264,68 +249,11 @@ void setup()
     WiFi.mode(WIFI_STA);
     const char *ssid = doc["Config-WiFi"][0];
     const char *password = doc["Config-WiFi"][1];
-    debugln();
     debugln(ssid);
     debugln(password);
     WiFi.begin(ssid, password);
     while (WiFi.status() != WL_CONNECTED)
     {
-<<<<<<< HEAD
-        WiFi.mode(WIFI_STA);
-        const char *ssid = doc["Config-WiFi"][0];
-        const char *password = doc["Config-WiFi"][1];
-        debugln(ssid);
-        debugln(password);
-        WiFi.begin(ssid, password);
-        while (WiFi.status() != WL_CONNECTED)
-        {
-            debug(".");
-            delay(2000);
-        }
-        debugln(WiFi.localIP());
-
-        // Assign the api key (required)
-        config.api_key = API_KEY;
-        // Assign the user sign in credentials
-        MB_String email = doc["Config-Firebase"][0];
-        auth.user.email = email;
-        MB_String password = doc["Config-Firebase"][1];
-        auth.user.password = password;
-
-        Firebase.reconnectWiFi(true);
-        fbdo.setResponseSize(4096);
-
-        // Assign the callback function for the long running token generation task
-        config.token_status_callback = tokenStatusCallback; // see addons/TokenHelper.h
-        // Assign the maximum retry of token generation
-        config.max_token_generation_retry = 5;
-        // Initialize the library with the Firebase authen and config
-        Firebase.begin(&config, &auth);
-
-        // Getting the user UID might take a few seconds
-        Serial.println("Getting User UID");
-        while ((auth.token.uid) == "")
-        {
-            Serial.print('.');
-            delay(1000);
-        }
-        // Print user UID
-        uid = auth.token.uid.c_str();
-        Serial.print("User UID: ");
-        Serial.print(uid);
-    }
-    else
-    {
-        WiFi.mode(WIFI_AP);
-        WiFi.softAP(ssid);                            // Create the access point
-        WiFi.softAPConfig(staticIP, gateway, subnet); // Set the static IP configuration
-
-        debugln("Access point created");
-        // debugln("IP address: " + WiFi.softAPIP().toString()); // Print the IP address of the access point
-        serverAP.on("/", HTTP_GET, handleRoot);            // Handle GET requests to the root URL
-        serverAP.on("/connect", HTTP_POST, handleConnect); // Handle POST requests to the "/connect" URL
-        serverAP.begin();                                  // Start the web serverAP
-=======
       debug(".");
       delay(2000);
     }
@@ -333,37 +261,19 @@ void setup()
 
     // Assign the api key (required)
     config.api_key = API_KEY;
-
     // Assign the user sign in credentials
-    // auth.user.email = "email";
-    // auth.user.password = "password";
-    const char *userEmail = doc["Config-Firebase"][0];
-    debugln(userEmail);
-    // auth.user.email = userEmail;
-    const char *userPassword = doc["Config-Firebase"][1];
-    debugln(userPassword);
-    // auth.user.email = userPassword;
+    auth.user.email = "georg.marek687@gmail.com";
+    auth.user.password = "Arduino";
 
-    // Initialize the library with the Firebase authen and config
-    Firebase.begin(API_KEY);
-
-    // Authenticate with Firebase using email and password
-    if (auth.signInWithEmailAndPassword(userEmail, userPassword))
-    {
-      Serial.println("Authenticated with Firebase");
-    }
-    else
-    {
-      Serial.println("Failed to authenticate with Firebase");
-      return;
->>>>>>> 27a45547a4c88b36f408088008f995a4fd2bb3d8
-    }
+    Firebase.reconnectWiFi(true);
+    fbdo.setResponseSize(4096);
 
     // Assign the callback function for the long running token generation task
     config.token_status_callback = tokenStatusCallback; // see addons/TokenHelper.h
-
     // Assign the maximum retry of token generation
     config.max_token_generation_retry = 5;
+    // Initialize the library with the Firebase authen and config
+    Firebase.begin(&config, &auth);
 
     // Getting the user UID might take a few seconds
     Serial.println("Getting User UID");
@@ -384,9 +294,7 @@ void setup()
     WiFi.softAPConfig(staticIP, gateway, subnet); // Set the static IP configuration
 
     debugln("Access point created");
-
-    debug("\nIP address: "); // Print the IP address of the access point
-    debugln(WiFi.softAPIP().toString());
+    // debugln("IP address: " + WiFi.softAPIP().toString()); // Print the IP address of the access point
     serverAP.on("/", HTTP_GET, handleRoot);            // Handle GET requests to the root URL
     serverAP.on("/connect", HTTP_POST, handleConnect); // Handle POST requests to the "/connect" URL
     serverAP.begin();                                  // Start the web serverAP
@@ -395,12 +303,8 @@ void setup()
 
 void loop()
 {
-<<<<<<< HEAD
-    if (Firebase.isTokenExpired()){
-=======
   if (Firebase.isTokenExpired())
   {
->>>>>>> 27a45547a4c88b36f408088008f995a4fd2bb3d8
     Firebase.refreshToken(&config);
     Serial.println("Refresh token");
   }

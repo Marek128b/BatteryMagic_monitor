@@ -1,5 +1,6 @@
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.21.0/firebase-app.js'
 import { getDatabase, ref, child, get } from 'https://www.gstatic.com/firebasejs/9.21.0/firebase-database.js'
+import { getAuth } from "https://www.gstatic.com/firebasejs/9.21.0/firebase-auth.js";
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
@@ -24,7 +25,7 @@ const rtdb = getDatabase();
 const dbRef = ref(rtdb);
 
 //get data from rtdb
-get(child(dbRef, "/")).then((snapshot) => {
+get(child(dbRef, "/Users/" + window.uid)).then((snapshot) => {
     if (snapshot.exists()) {
         console.log(snapshot.val());
     } else {
@@ -33,3 +34,25 @@ get(child(dbRef, "/")).then((snapshot) => {
 }).catch((error) => {
     console.error(error);
 });
+
+//getThe current User
+const auth = getAuth();
+const user = auth.currentUser;
+
+if (user !== null) {
+    user.providerData.forEach((profile) => {
+        console.log("Sign-in provider: " + profile.providerId);
+        console.log("  Provider-specific UID: " + profile.uid);
+        //get data from rtdb
+        get(child(dbRef, "/Users/" + profile.uid)).then((snapshot) => {
+            if (snapshot.exists()) {
+                console.log(snapshot.val());
+            } else {
+                console.log("No data available");
+            }
+        }).catch((error) => {
+            console.error(error);
+        });
+    });
+}
+
