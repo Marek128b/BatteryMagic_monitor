@@ -5,14 +5,14 @@
 #include <ArduinoJson.h>
 #include <AsyncTCP.h>
 #include <ESPAsyncWebServer.h>
+#include "time.h"
 
 // Provide the token generation process info.
 #include "addons/TokenHelper.h"
 #include "addons/RTDBHelper.h"
 
-#include <NoDelay.h>
-
-NoDelay timer1(5000);
+unsigned long lastInterval = 0;
+unsigned long interval = 50000;
 
 #define pinRebootAP 14
 
@@ -28,6 +28,7 @@ NoDelay timer1(5000);
 
 // Insert Firebase project API Key
 #define API_KEY "AIzaSyBHIc9XTrsoHxUlgKc1kuCGbg0P6JbSXSY"
+#define DATABASE_URL "magicbattery-1abba-default-rtdb.europe-west1.firebasedatabase.app" //<databaseName>.firebaseio.com or <databaseName>.<region>.firebasedatabase.app
 
 const char *ssid = "BatteryMagic-AP"; // Set the SSID (network name) of the access point
 
@@ -44,6 +45,11 @@ FirebaseConfig config;
 
 // Variable to save USER UID
 String uid;
+
+int timestamp;
+FirebaseJson json;
+
+const char *ntpServer = "pool.ntp.org";
 
 static const char html[] PROGMEM = R"rawliteral(
 <html>
@@ -223,15 +229,48 @@ void handleConnect(AsyncWebServerRequest *request)
   esp_restart(); // reboot the esp32 uC
 }
 
+// Function that gets current epoch time
+unsigned long getTime()
+{
+  time_t now;
+  struct tm timeinfo;
+  if (!getLocalTime(&timeinfo))
+  {
+    // Serial.println("Failed to obtain time");
+    return (0);
+  }
+  time(&now);
+  return now;
+}
+
 void writeRTDB()
 {
-  
+  // Get current timestamp
+  timestamp = getTime();
+  debug("\ntime: ");
+  debugln(timestamp);
+
+  // json.set(, String(timestamp));
+
+  char jsonData[256];
+  sniprintf(jsonData, sizeof(jsonData), "{timestamp: %d, type: '6s', voltages: ['1s', '2s', '3s', '4s', '5s', '6s']}", timestamp);
+  debugln(jsonData);
+  // json.setJsonData(jsonData);
+
+  json.set("/time", String(timestamp));
+
+  char dbPath[256];
+  snprintf(dbPath, sizeof(dbPath), "Users/%s/data", uid.c_str());
+  debugln(dbPath);
+
+  Serial.printf("Set json... %s\n", Firebase.RTDB.setJSON(&fbdo, "Users/data", &json) ? "ok" : fbdo.errorReason().c_str());
 }
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 void setup()
 {
   Serial.begin(115200);
   pinMode(pinRebootAP, INPUT_PULLDOWN);
+  configTime(0, 0, ntpServer);
 
   if (!SPIFFS.begin())
   {
@@ -276,6 +315,9 @@ void setup()
     Firebase.reconnectWiFi(true);
     fbdo.setResponseSize(4096);
 
+    /* Assign the RTDB URL (required) */
+    config.database_url = DATABASE_URL;
+
     // Assign the callback function for the long running token generation task
     config.token_status_callback = tokenStatusCallback; // see addons/TokenHelper.h
     // Assign the maximum retry of token generation
@@ -308,14 +350,15 @@ void setup()
     serverAP.begin();                                  // Start the web serverAP
   }
 
-  timer1.begin();
+  lastInterval = millis() + interval;
 }
 
 void loop()
 {
-  if (timer1.isTriggered())
+  if (Firebase.ready() && (millis() - lastInterval >= interval))
   {
     writeRTDB();
+    lastInterval = millis();
   }
 
   if (Firebase.isTokenExpired())
