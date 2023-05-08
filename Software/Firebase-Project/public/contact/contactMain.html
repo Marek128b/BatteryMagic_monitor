@@ -24,8 +24,8 @@
             <!-- NAVIGATION MENUS -->
             <div class="menu">
                 <li><a href="../index.html">Home</a></li>
-                <li><a href="../contact/contactMain.html">Dashboard</a></li>
-                <li><a href="../SignIn-Up/logInSignIn.html">SignIn/SignUp</a></li>
+                <li><a href="../dashboard/dashboardMain.html">Dashboard</a></li>
+                <li><a href="../SignIn-Up/logInSignIn.html" id="SignIn-SignUp_Label">SignIn/SignUp</a></li>
                 <li><a href="#">Contact</a></li>
             </div>
         </ul>
@@ -37,5 +37,9 @@
         <h2>Email: some Email</h2>
     </div>
 </body>
-
+<script>
+    if(window.isSignedIn){
+      document.getElementById("SignIn-SignUp_Label").innerHTML = "SignedIn";
+    }
+  </script>
 </html>

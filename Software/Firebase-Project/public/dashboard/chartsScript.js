@@ -26,15 +26,18 @@ const rtdb = getDatabase();
 const dbRef = ref(rtdb);
 
 //get data from rtdb
-get(child(dbRef, "/Users/" + window.uid + "/Device Name")).then((snapshot) => {
-    if (snapshot.exists()) {
-        console.log(snapshot.val());
-    } else {
-        console.log("No data available");
-    }
-}).catch((error) => {
-    console.error(error);
-});
+if (window.isSignedIn) {
+    get(child(dbRef, "/Users/" + window.uid + "/Device Name")).then((snapshot) => {
+        if (snapshot.exists()) {
+            console.log(snapshot.val());
+        } else {
+            console.log("No data available");
+        }
+    }).catch((error) => {
+        console.error(error);
+    });
+}
+
 
 let chart = new Chart(document.getElementById("myFirstChart"), {
     type: 'line',

@@ -39,6 +39,8 @@ buttonSignUp.addEventListener("click", function (e) {
                 console.log("Signed In and Created User");
                 // ...
                 document.getElementById("SignIn-SignUp_Label").innerHTML = "SignedIn";
+                window.isSignedIn = true;
+
                 //redirect to Home
                 window.location.href = "../index.html";
             })
@@ -65,6 +67,7 @@ buttonLogin.addEventListener("click", function (e) {
             const user = userCredential.user;
             // ...
             document.getElementById("SignIn-SignUp_Label").innerHTML = "SignedIn";
+            window.isSignedIn = true;
             //redirect to Home
             window.location.href = "../index.html";
         })
@@ -93,6 +96,8 @@ function signInWithPopupClick() {
             // IdP data available using getAdditionalUserInfo(result)
 
             document.getElementById("SignIn-SignUp_Label").innerHTML = "SignedIn";
+            window.isSignedIn = true;
+
             // ...
         }).catch((error) => {
             // Handle Errors here.

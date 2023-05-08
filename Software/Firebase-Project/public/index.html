@@ -11,6 +11,7 @@
   <!--Dark Mode Logic-->
   <link rel="stylesheet" href="./dark-mode-logic/dark-mode.css">
   <script src="./dark-mode-logic/script.js"></script>
+  <script src="globalVariables.js"></script>
 </head>
 
 <body>
@@ -24,7 +25,7 @@
       <div class="menu">
         <li><a href="#">Home</a></li>
         <li><a href="dashboard/dashboardMain.html">Dashboard</a></li>
-        <li><a href="SignIn-Up/logInSignIn.html">SignIn/SignUp</a></li>
+        <li><a href="SignIn-Up/logInSignIn.html" id="SignIn-SignUp_Label">SignIn/SignUp</a></li>
         <li><a href="contact/contactMain.html">Contact</a></li>
       </div>
     </ul>
@@ -35,5 +36,10 @@
     </h1>
   </div>
 </body>
+<script>
+  if(window.isSignedIn){
+    document.getElementById("SignIn-SignUp_Label").innerHTML = "SignedIn";
+  }
+</script>
 
 </html>

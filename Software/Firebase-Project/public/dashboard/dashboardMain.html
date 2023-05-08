@@ -25,7 +25,7 @@
             <div class="menu">
                 <li><a href="../index.html">Home</a></li>
                 <li><a href="#">Dashboard</a></li>
-                <li><a href="../SignIn-Up/logInSignIn.html">SignIn/SignUp</a></li>
+                <li><a href="../SignIn-Up/logInSignIn.html" id="SignIn-SignUp_Label">SignIn/SignUp</a></li>
                 <li><a href="../contact/contactMain.html">Contact</a></li>
             </div>
         </ul>
@@ -44,5 +44,10 @@
     <script src="../globalVariables.js"></script>
     <script src="chartsScript.js" type="module"></script>
 </body>
+<script>
+    if (window.isSignedIn) {
+        document.getElementById("SignIn-SignUp_Label").innerHTML = "SignedIn";
+    }
+</script>
 
 </html>
