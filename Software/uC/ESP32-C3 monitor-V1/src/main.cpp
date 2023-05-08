@@ -10,6 +10,10 @@
 #include "addons/TokenHelper.h"
 #include "addons/RTDBHelper.h"
 
+#include <NoDelay.h>
+
+NoDelay timer1(5000);
+
 #define pinRebootAP 14
 
 #define DEBUG 1
@@ -219,6 +223,10 @@ void handleConnect(AsyncWebServerRequest *request)
   esp_restart(); // reboot the esp32 uC
 }
 
+void writeRTDB()
+{
+  
+}
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 void setup()
 {
@@ -299,10 +307,17 @@ void setup()
     serverAP.on("/connect", HTTP_POST, handleConnect); // Handle POST requests to the "/connect" URL
     serverAP.begin();                                  // Start the web serverAP
   }
+
+  timer1.begin();
 }
 
 void loop()
 {
+  if (timer1.isTriggered())
+  {
+    writeRTDB();
+  }
+
   if (Firebase.isTokenExpired())
   {
     Firebase.refreshToken(&config);
