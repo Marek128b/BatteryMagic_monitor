@@ -18,7 +18,7 @@ unsigned long interator = 0;
 
 #define pinRebootAP 14
 
-#define DEBUG 1
+// #define DEBUG
 
 #ifdef DEBUG
 #define debug(x) Serial.print(x)
@@ -220,10 +220,9 @@ void handleConnect(AsyncWebServerRequest *request)
   }
   debugln("----------------------------------------------------------------");
 
-  if (DEBUG)
-  {
-    serializeJsonPretty(doc, Serial);
-  }
+#ifdef DEBUG
+  serializeJsonPretty(doc, Serial);
+#endif
 
   File filew = SPIFFS.open("/NetworkConfig.txt", "w");
   serializeJsonPretty(doc, filew); // write the Json Data to the FS
@@ -238,7 +237,7 @@ unsigned long getTime()
   struct tm timeinfo;
   if (!getLocalTime(&timeinfo))
   {
-    // Serial.println("Failed to obtain time");
+    debugln("Failed to obtain time");
     return (0);
   }
   time(&now);
@@ -266,7 +265,32 @@ void writeRTDB()
   snprintf(dbPath, sizeof(dbPath), "Users/%s/%s/data/%d", uid.c_str(), "BatteryName", interator);
   debugln(dbPath);
 
-  Serial.printf("Set json... %s\n", Firebase.RTDB.setJSON(&fbdo, dbPath, &json) ? "ok" : fbdo.errorReason().c_str());
+  debug("Set Json... ");
+  if (Firebase.RTDB.setJSON(&fbdo, dbPath, &json))
+  {
+    debug("ok");
+  }
+  else
+  {
+    debug(fbdo.errorReason().c_str());
+  }
+}
+
+void readRTDB()
+{
+  char dbPath[256];
+  snprintf(dbPath, sizeof(dbPath), "Users/%s/%s/startCharging", uid.c_str(), "BatteryName");
+  debugln(dbPath);
+
+  debug("get string... ");
+  if (Firebase.RTDB.getString(&fbdo, dbPath))
+  {
+    debug(fbdo.to<const char *>());
+  }
+  else
+  {
+    debug(fbdo.errorReason().c_str());
+  }
 }
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 void setup()
@@ -288,10 +312,9 @@ void setup()
   {
     doc["isConfigured"] = false;
   }
-  if (DEBUG)
-  {
-    serializeJsonPretty(doc, Serial);
-  }
+#ifdef DEBUG
+  serializeJsonPretty(doc, Serial);
+#endif
   file.close();
 
   if (doc["isConfigured"] == true)
@@ -329,16 +352,16 @@ void setup()
     Firebase.begin(&config, &auth);
 
     // Getting the user UID might take a few seconds
-    Serial.println("Getting User UID");
+    debugln("Getting User UID");
     while ((auth.token.uid) == "")
     {
-      Serial.print('.');
+      debug('.');
       delay(1000);
     }
     // Print user UID
     uid = auth.token.uid.c_str();
-    Serial.print("User UID: ");
-    Serial.print(uid);
+    debug("User UID: ");
+    debug(uid);
   }
   else
   {
@@ -352,6 +375,22 @@ void setup()
     serverAP.on("/connect", HTTP_POST, handleConnect); // Handle POST requests to the "/connect" URL
     serverAP.begin();                                  // Start the web serverAP
   }
+  if (Firebase.ready())
+  {
+    char dbPath[256];
+    snprintf(dbPath, sizeof(dbPath), "Users/%s/%s/data/", uid.c_str(), "BatteryName");
+    debugln(dbPath);
+
+    debug("Delete data... ");
+    if (Firebase.RTDB.deleteNode(&fbdo, dbPath))
+    {
+      debug("ok");
+    }
+    else
+    {
+      debug(fbdo.errorReason().c_str());
+    }
+  }
 
   lastInterval = millis() + interval;
 }
@@ -360,6 +399,8 @@ void loop()
 {
   if (Firebase.ready() && (millis() - lastInterval >= interval))
   {
+    readRTDB();
+    // readADC();
     writeRTDB();
     interator++;
     lastInterval = millis();
@@ -368,6 +409,6 @@ void loop()
   if (Firebase.isTokenExpired())
   {
     Firebase.refreshToken(&config);
-    Serial.println("Refresh token");
+    debugln("Refresh token");
   }
 }
