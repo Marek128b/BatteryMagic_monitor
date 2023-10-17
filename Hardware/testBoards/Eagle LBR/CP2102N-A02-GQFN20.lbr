@@ -1,0 +1,160 @@
+<!--This work is licensed under a Creative Commons Attribution-ShareAlike 4.0 International License (CC BY-SA) with Design Exception 1.0-->
+<eagle version="7.1.0">
+<drawing>
+<settings>
+<setting alwaysvectorfont="no"/>
+<setting verticaltext="up"/>
+</settings>
+<grid distance="0.1" unitdist="inch" unit="inch" style="lines" multiple="1" display="no" altdistance="0.01" altunitdist="inch" altunit="inch"/>
+<layers>
+<layer number="1" name="Top" color="4" fill="1" visible="yes" active="yes"/>
+<layer number="16" name="Bottom" color="1" fill="1" visible="yes" active="yes"/>
+<layer number="17" name="Pads" color="2" fill="1" visible="yes" active="yes"/>
+<layer number="18" name="Vias" color="2" fill="1" visible="yes" active="yes"/>
+<layer number="19" name="Unrouted" color="6" fill="1" visible="yes" active="yes"/>
+<layer number="20" name="Dimension" color="15" fill="1" visible="yes" active="yes"/>
+<layer number="21" name="tPlace" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="22" name="bPlace" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="23" name="tOrigins" color="15" fill="1" visible="yes" active="yes"/>
+<layer number="24" name="bOrigins" color="15" fill="1" visible="yes" active="yes"/>
+<layer number="25" name="tNames" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="26" name="bNames" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="27" name="tValues" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="28" name="bValues" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="29" name="tStop" color="7" fill="3" visible="yes" active="yes"/>
+<layer number="30" name="bStop" color="7" fill="6" visible="no" active="yes"/>
+<layer number="31" name="tCream" color="7" fill="4" visible="yes" active="yes"/>
+<layer number="32" name="bCream" color="7" fill="5" visible="no" active="yes"/>
+<layer number="33" name="tFinish" color="6" fill="3" visible="no" active="yes"/>
+<layer number="34" name="bFinish" color="6" fill="6" visible="no" active="yes"/>
+<layer number="35" name="tGlue" color="7" fill="4" visible="no" active="yes"/>
+<layer number="36" name="bGlue" color="7" fill="5" visible="no" active="yes"/>
+<layer number="37" name="tTest" color="7" fill="1" visible="no" active="yes"/>
+<layer number="38" name="bTest" color="7" fill="1" visible="no" active="yes"/>
+<layer number="39" name="tKeepout" color="4" fill="11" visible="yes" active="yes"/>
+<layer number="40" name="bKeepout" color="1" fill="11" visible="yes" active="yes"/>
+<layer number="41" name="tRestrict" color="4" fill="10" visible="yes" active="yes"/>
+<layer number="42" name="bRestrict" color="1" fill="10" visible="yes" active="yes"/>
+<layer number="43" name="vRestrict" color="2" fill="10" visible="yes" active="yes"/>
+<layer number="44" name="Drills" color="7" fill="1" visible="no" active="yes"/>
+<layer number="45" name="Holes" color="7" fill="1" visible="no" active="yes"/>
+<layer number="46" name="Milling" color="3" fill="1" visible="no" active="yes"/>
+<layer number="47" name="Measures" color="7" fill="1" visible="no" active="yes"/>
+<layer number="48" name="Document" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="49" name="Reference" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="51" name="tDocu" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="52" name="bDocu" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="90" name="Modules" color="5" fill="1" visible="yes" active="yes"/>
+<layer number="91" name="Nets" color="2" fill="1" visible="yes" active="yes"/>
+<layer number="92" name="Busses" color="1" fill="1" visible="yes" active="yes"/>
+<layer number="93" name="Pins" color="2" fill="1" visible="yes" active="yes"/>
+<layer number="94" name="Symbols" color="4" fill="1" visible="yes" active="yes"/>
+<layer number="95" name="Names" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="96" name="Values" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="97" name="Info" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="98" name="Guide" color="6" fill="1" visible="yes" active="yes"/>
+</layers>
+<library>
+<packages>
+<package name="WFQFN-20">
+<text x="-1.27" y="2.54" size="0.6096" layer="21">&gt;NAME</text>
+<circle x="-1.905" y="1.905" radius="0.254" width="0" layer="21"/>
+<smd name="EXP" x="0" y="0" dx="1.8" dy="1.8" layer="1"/>
+<smd name="2" x="-1.55" y="0.75" dx="0.3" dy="0.9" layer="1" rot="R90"/>
+<smd name="3" x="-1.55" y="0.25" dx="0.3" dy="0.9" layer="1" rot="R90"/>
+<smd name="4" x="-1.55" y="-0.25" dx="0.3" dy="0.9" layer="1" rot="R90"/>
+<smd name="5" x="-1.55" y="-0.75" dx="0.3" dy="0.9" layer="1" rot="R90"/>
+<smd name="7" x="-0.75" y="-1.55" dx="0.3" dy="0.9" layer="1" rot="R180"/>
+<smd name="8" x="-0.25" y="-1.55" dx="0.3" dy="0.9" layer="1" rot="R180"/>
+<smd name="9" x="0.25" y="-1.55" dx="0.3" dy="0.9" layer="1" rot="R180"/>
+<smd name="10" x="0.75" y="-1.55" dx="0.3" dy="0.9" layer="1" rot="R180"/>
+<smd name="12" x="1.55" y="-0.75" dx="0.3" dy="0.9" layer="1" rot="R270"/>
+<smd name="13" x="1.55" y="-0.25" dx="0.3" dy="0.9" layer="1" rot="R270"/>
+<smd name="14" x="1.55" y="0.25" dx="0.3" dy="0.9" layer="1" rot="R270"/>
+<smd name="15" x="1.55" y="0.75" dx="0.3" dy="0.9" layer="1" rot="R270"/>
+<smd name="17" x="0.75" y="1.55" dx="0.3" dy="0.9" layer="1"/>
+<smd name="18" x="0.25" y="1.55" dx="0.3" dy="0.9" layer="1"/>
+<smd name="19" x="-0.25" y="1.55" dx="0.3" dy="0.9" layer="1"/>
+<smd name="20" x="-0.75" y="1.55" dx="0.3" dy="0.9" layer="1"/>
+<smd name="1" x="-1.25" y="1.25" dx="0.35" dy="0.35" layer="1"/>
+<smd name="6" x="-1.25" y="-1.25" dx="0.35" dy="0.35" layer="1"/>
+<smd name="11" x="1.25" y="-1.25" dx="0.35" dy="0.35" layer="1"/>
+<smd name="16" x="1.25" y="1.25" dx="0.35" dy="0.35" layer="1"/>
+</package>
+</packages>
+<symbols>
+<symbol name="CP2102N-A02-GQFN20">
+<wire x1="-15.24" y1="-12.7" x2="15.24" y2="-12.7" width="0.254" layer="94"/>
+<wire x1="15.24" y1="-12.7" x2="15.24" y2="12.7" width="0.254" layer="94"/>
+<wire x1="15.24" y1="12.7" x2="-15.24" y2="12.7" width="0.254" layer="94"/>
+<wire x1="-15.24" y1="12.7" x2="-15.24" y2="-12.7" width="0.254" layer="94"/>
+<text x="-12.7" y="17.78" size="2.54" layer="96">&gt;NAME</text>
+<text x="-12.7" y="15.24" size="2.1844" layer="96">CP2102N</text>
+<pin name="GPIO1/RS485" x="-20.32" y="10.16" length="middle"/>
+<pin name="GPIO0/CLK" x="-20.32" y="7.62" length="middle"/>
+<pin name="GND" x="-20.32" y="5.08" length="middle"/>
+<pin name="D+" x="-20.32" y="2.54" length="middle"/>
+<pin name="D-" x="-20.32" y="0" length="middle"/>
+<pin name="VDD" x="-20.32" y="-2.54" length="middle"/>
+<pin name="VREGIN" x="-20.32" y="-5.08" length="middle"/>
+<pin name="VBUS" x="-20.32" y="-7.62" length="middle"/>
+<pin name="RSTB" x="-20.32" y="-10.16" length="middle"/>
+<pin name="SUSPENDB" x="20.32" y="-10.16" length="middle" rot="R180"/>
+<pin name="WAKEUP" x="20.32" y="-7.62" length="middle" rot="R180"/>
+<pin name="SUSPEND" x="20.32" y="-5.08" length="middle" rot="R180"/>
+<pin name="CTS" x="20.32" y="-2.54" length="middle" rot="R180"/>
+<pin name="RTS" x="20.32" y="0" length="middle" rot="R180"/>
+<pin name="RXD" x="20.32" y="2.54" length="middle" rot="R180"/>
+<pin name="TXD" x="20.32" y="5.08" length="middle" rot="R180"/>
+<pin name="GPIO3/RXT" x="20.32" y="7.62" length="middle" rot="R180"/>
+<pin name="GPIO2/TXT" x="20.32" y="10.16" length="middle" rot="R180"/>
+</symbol>
+</symbols>
+<devicesets>
+<deviceset name="CP2102N-A02-GQFN20" prefix="U">
+<description> &lt;a href="https://pricing.snapeda.com/parts/CP2102N-A02-GQFN20/Silicon%20Labs/view-part?ref=eda"&gt;Check availability&lt;/a&gt;</description>
+<gates>
+<gate name="G$1" symbol="CP2102N-A02-GQFN20" x="0" y="0"/>
+</gates>
+<devices>
+<device name="" package="WFQFN-20">
+<connects>
+<connect gate="G$1" pin="CTS" pad="15"/>
+<connect gate="G$1" pin="D+" pad="4"/>
+<connect gate="G$1" pin="D-" pad="5"/>
+<connect gate="G$1" pin="GND" pad="3 12 EXP"/>
+<connect gate="G$1" pin="GPIO0/CLK" pad="2"/>
+<connect gate="G$1" pin="GPIO1/RS485" pad="1"/>
+<connect gate="G$1" pin="GPIO2/TXT" pad="20"/>
+<connect gate="G$1" pin="GPIO3/RXT" pad="19"/>
+<connect gate="G$1" pin="RSTB" pad="9"/>
+<connect gate="G$1" pin="RTS" pad="16"/>
+<connect gate="G$1" pin="RXD" pad="17"/>
+<connect gate="G$1" pin="SUSPEND" pad="14"/>
+<connect gate="G$1" pin="SUSPENDB" pad="11"/>
+<connect gate="G$1" pin="TXD" pad="18"/>
+<connect gate="G$1" pin="VBUS" pad="8"/>
+<connect gate="G$1" pin="VDD" pad="6"/>
+<connect gate="G$1" pin="VREGIN" pad="7"/>
+<connect gate="G$1" pin="WAKEUP" pad="13"/>
+</connects>
+<technologies>
+<technology name="">
+<attribute name="MF" value="Silicon Labs"/>
+<attribute name="Description" value="
+USB Bridge, USB to UART USB 2.0 UART Interface 20-QFN (3x3)
+"/>
+<attribute name="Package" value="WFQFN-20 Silicon Labs"/>
+<attribute name="Price" value="None"/>
+<attribute name="MP" value="CP2102N-A02-GQFN20"/>
+<attribute name="Availability" value="In Stock"/>
+<attribute name="Purchase-URL" value="https://pricing.snapeda.com/search/part/CP2102N-A02-GQFN20/?ref=eda"/>
+</technology>
+</technologies>
+</device>
+</devices>
+</deviceset>
+</devicesets>
+</library>
+</drawing>
+</eagle>
