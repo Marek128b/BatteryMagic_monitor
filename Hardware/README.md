@@ -7,6 +7,9 @@
     - [Link](#link)
   - [PCB](#pcb)
   - [diagramm](#diagramm)
+  - [Iset](#iset)
+    - [calculations](#calculations)
+    - [Multisim circuit](#multisim-circuit)
 
 ---
 ## description
@@ -28,3 +31,16 @@ https://easyeda.com/editor#id=32b7ace7bde44caea4c9ae37066067a1|f48f90d7611346188
 ---
 ## diagramm
 ![no Pic diagramm](img/AkkuMagic.drawio.svg)
+
+---
+## Iset
+
+### calculations
+
+<img src="./img/Icharge-Viset-calculations.PNG">
+
+Therefore V_ISET = 0,200V to 2,0V when R_SR = 10m Ohm and I_CHARGE from 1A to 10A. <br>
+
+### Multisim circuit
+
+<img src="./img/LP-DAC-pic.PNG" width=100%>
